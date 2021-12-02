@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{{ recipe.name }}{% endblock %}
+{% block content %}
+    <h1>{{recipe.name}}</h1>
+    <h3>posted by {{recipe.user.first_name}} {{recipe.user.last_name}}</h3>
+    <img src="{{ user.profile.profile_picture.url }} " width="40" height="40">
+    <div class="product-detail">
+        {% load thumbnail %}
+        <a href="{{ recipe.image.url }}">
+            <img src="{% thumbnail recipe.image 300x0 %}" class="image-detail">
+        </a>
+        {% with total_likes=recipe.users_like.count users_like=recipe.users_like.all %}
+        <h2>
+            <a href="{{recipe.category.get_absolute_url}}">{{recipe.category}}</a>
+        </h2>
+        <span class="count">
+            <span class="total">{{ total_likes }}</span>
+            like{{ total_likes|pluralize }}
+        </span>
+        <span class="count">
+            {{ total_views }} view{{ total_views|pluralize }}
+        </span>
+        <a href="#" data-id="{{ recipe.id }}" data-action="{% if request.user in users_like %}un{% endif %}like"
+        class="like button">
+            {% if request.user not in users_like %}
+                Like
+            {% else %}
+                Unlike
+            {% endif %}
+        </a>
+        <a href="{% url "recipes:recipe_share" recipe.id %}">
+            Share this recipe
+        </a>
+        <p>${{recipe.price}}</p>
+        {% comment %} <div class="image-likes">
+            <p style="float:left">People who have liked this recipe!</p>
+            {% for user in users_like.all %}
+                <div>
+                <img src="{{ user.profile.profile_picture.url }}">
+                <p>{{ user.first_name }}</p>
+                </div>
+            {% empty %}
+                Nobody likes this recipe yet.
+            {% endfor %}
+        </div> {% endcomment %}
+        <form action="{% url "cart:cart_add" recipe.id %}" method="post">
+            {{ cart_recipe_form }}
+            {% csrf_token %}
+            <input type="submit" value="Add to cart">
+        </form>
+        {{ recipe.ingredients|linebreaks }}
+    </div>
+    {% endwith %}
+{% endblock content %}
+
+{% block domready %}
+  $('a.like').click(function(e){
+    e.preventDefault();
+    $.post('{% url "recipes:like" %}',
+      {
+        id: $(this).data('id'),
+        action: $(this).data('action')
+      },
+      function(data){
+        if (data['status'] == 'ok')
+        {
+          var previous_action = $('a.like').data('action');
+          // toggle data-action
+          $('a.like').data('action', previous_action == 'like' ?
+          'unlike' : 'like');
+          // toggle link text
+          $('a.like').text(previous_action == 'like' ? 'Unlike' :
+          'Like');
+          // update total likes
+          var previous_likes = parseInt($('span.count .total').text());
+          $('span.count .total').text(previous_action == 'like' ?
+          previous_likes + 1 : previous_likes - 1);
+        }
+      }
+    );
+  });
+{% endblock %}

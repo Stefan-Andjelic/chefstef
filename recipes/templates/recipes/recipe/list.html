@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Recipes{% endblock %}
+{% block content %}
+  <h1>Recipes</h1>
+    <div id="sidebar">
+        <h3>Categories</h3>
+        <ul>
+            <li>
+                <a href="{% url 'recipes:recipe_list' %}">ALL</a>
+            </li>
+            {% for c in categories %}
+                <li {% if category.slug == c.slug %}class="selected"{% endif %}>
+                    <a href="{{c.get_absolute_url}}">{{c.name}}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div> 
+    <div id="image-list">
+        {% include "recipes/recipe/list_ajax.html" %}
+    </div>
+{% endblock %}
+
+{% block domready %}
+  var page = 1;
+  var empty_page = false;
+  var block_request = false;
+  $(window).scroll(function() {
+    var margin = $(document).height() - $(window).height() - 200;
+    if($(window).scrollTop() > margin && empty_page == false &&
+    block_request == false) {
+     block_request = true;
+      page += 1;
+      $.get('?page=' + page, function(data) {
+        if(data == '') {
+          empty_page = true;
+        }
+        else {
+          block_request = false;
+          $('#image-list').append(data);
+        }
+      });
+    }
+  });
+{% endblock %}
+
+{% comment %} {% extends "base.html" %}
+{% load static %}
+{% block title %}Recipes{% endblock %}
+{% block content %}
+    <div id="sidebar">
+        <h3>Categories</h3>
+        <ul>
+            <li>
+                <a href="{% url 'recipes:recipe_list' %}">ALL</a>
+            </li>
+            {% for c in categories %}
+                <li {% if category.slug == c.slug %}class="selected"{% endif %}>
+                    <a href="{{c.get_absolute_url}}">{{c.name}}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>    
+    <div id="main" class="product-list">
+        <h1>Recipes</h1>
+        {% for recipe in recipes %}
+            <div class="item">
+                <a href="{{ recipe.get_absolute_url }}">
+                <img src="{{ recipe.image.url }}">
+                </a>
+                <a href="{{ recipe.get_absolute_url }}">{{ recipe.name }}</a>
+                <br>
+                ${{ recipe.price }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %} {% endcomment %}
+
+

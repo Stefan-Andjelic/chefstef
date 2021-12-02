@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static "css/base.css" %}" rel="stylesheet">
+</head>
+<body>
+    <div id="header">
+        <span class="logo"><a href="{% url 'about_us' %}">Chef Stef</a></span>
+        {% if request.user.is_authenticated %}
+            <ul class="menu">
+                <li {% if section == "recipe" %}class="selected"{% endif %}>
+                    <a href="{% url 'recipes:recipe_list' %}">Recipes</a>
+                </li>
+                <li {% if section == "about_us" %}class="selected"{% endif %}>
+                    <a href="{% url 'about_us' %}">About Us</a>
+                </li>
+                <li {% if section == "people" %}class="selected"{% endif %}>
+                    <a href="{% url "user_list" %}">Community</a>
+                </li>
+                <li {% if section == "dashboard" %}class="selected"{% endif %}>
+                    <a href="{% url "dashboard" %}">Dashboard</a>
+                </li>
+                <li {% if section == "most_popular" %}class="selected"{% endif %}>
+                    <a href="{% url "recipes:ranking" %}">Most Popular</a>
+                </li>
+                
+            </ul>
+        {% endif %}
+        <span class="user">
+        {% if request.user.is_authenticated %}
+            Hello {{ request.user.first_name }},
+            <a href="{% url "logout" %}">Logout</a>
+        {% else %}
+            <a href="{% url "login" %}">Log-in</a>
+        {% endif %}
+        </span>
+    </div>
+    <div id="subheader">
+        <div class="cart">
+            {% with total_items=cart|length %}
+                {% if total_items > 0 %}
+                    Your cart:
+                    <a href="{% url 'cart:cart_detail' %}">
+                        {{total_items}} item{{total_items|pluralize}}, ${{cart.get_total_price}}
+                    </a>
+                {% else %}
+                    Your cart is empty.
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">
+                    {{ message|safe }}
+                    <a href="#" class="close">x</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.1/src/js.cookie.min.js"></script>
+    <script>
+        var csrftoken = Cookies.get('csrftoken');
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        $(document).ready(function(){
+            {% block domready %}
+            {% endblock %}
+        });
+    </script>
+</body>
+</html>
