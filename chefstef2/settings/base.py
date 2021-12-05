@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.join(__file__
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['chefstef-for-ms.xyz', 'www.chefstef-for-ms.xyz', '64.227.25.99', 'localhost', '127.0.0.1']
 
