@@ -14,9 +14,14 @@ from pathlib import Path
 from django.urls import reverse_lazy
 import os
 import braintree
+from django.conf import settings
+import dj_database_url
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
