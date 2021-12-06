@@ -10,20 +10,23 @@
         <span class="logo"><a href="{% url 'about_us' %}">Chef Stef</a></span>
         {% if request.user.is_authenticated %}
             <ul class="menu">
+                <li {% if section == "home" %}class="selected"{% endif %}>
+                    <a href="{% url 'home:home_page' %}">Home</a>
+                </li>
                 <li {% if section == "recipe" %}class="selected"{% endif %}>
                     <a href="{% url 'recipes:recipe_list' %}">Recipes</a>
                 </li>
+                <li {% if section == "most_popular" %}class="selected"{% endif %}>
+                    <a href="{% url "recipes:ranking" %}">Most Popular</a>
+                </li>                
                 <li {% if section == "about_us" %}class="selected"{% endif %}>
                     <a href="{% url 'about_us' %}">About Us</a>
-                </li>
+                </li>                
                 <li {% if section == "people" %}class="selected"{% endif %}>
                     <a href="{% url "user_list" %}">Community</a>
                 </li>
                 <li {% if section == "dashboard" %}class="selected"{% endif %}>
-                    <a href="{% url "dashboard" %}">Dashboard</a>
-                </li>
-                <li {% if section == "most_popular" %}class="selected"{% endif %}>
-                    <a href="{% url "recipes:ranking" %}">Most Popular</a>
+                    <a href="{% url "dashboard" %}">Your Dashboard</a>
                 </li>
                 
             </ul>

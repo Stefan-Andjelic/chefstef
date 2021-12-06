@@ -33,7 +33,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['chefstef-for-ms.xyz', 'www.chefstef-for-ms.xyz', '64.227.25.99', 'localhost', '127.0.0.1']
+# ALLOWED_HOSTS = ['chefstef-for-ms.xyz', 'www.chefstef-for-ms.xyz', '64.227.25.99', 'localhost', '127.0.0.1']
+
+if settings.DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = ['chefstef-for-ms.xyz', 'www.chefstef-for-ms.xyz', '64.227.25.99', 'localhost', '127.0.0.1']
+
 
 # ID for sitemap
 SITE_ID = 1
@@ -55,6 +61,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'payment.apps.PaymentConfig',
     'easy_thumbnails',
+    'home.apps.HomeConfig',
 ]
 
 MIDDLEWARE = [
