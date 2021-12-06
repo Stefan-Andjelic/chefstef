@@ -158,8 +158,8 @@ LOGOUT_URL = 'logout'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'stefanandjelic8@gmail.com'
-EMAIL_HOST_PASSWORD = 'Serbia123'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -175,9 +175,9 @@ CART_SESSION_ID = 'cart'
 
 
 # Braintree settings
-BRAINTREE_MERCHANT_ID = 'x836qbm9jdw9bjtm'  # Merchant ID
-BRAINTREE_PUBLIC_KEY = 'fg8hp2rbh37mnc3g'   # Public Key
-BRAINTREE_PRIVATE_KEY = 'b9a024acef3c97bf93367a9aa3102361'  # Private key
+BRAINTREE_MERCHANT_ID = os.environ.get('BRAINTREE_MERCHANT_ID')  # Merchant ID
+BRAINTREE_PUBLIC_KEY = os.environ.get('BRAINTREE_PUBLIC_KEY')   # Public Key
+BRAINTREE_PRIVATE_KEY = os.environ.get('BRAINTREE_PRIVATE_KEY')  # Private key
 
 BRAINTREE_CONF = braintree.Configuration(
     braintree.Environment.Sandbox,
@@ -186,10 +186,9 @@ BRAINTREE_CONF = braintree.Configuration(
     BRAINTREE_PRIVATE_KEY
 )
 
-#ALLOWED_HOSTS = ['mysite.com', 'localhost', '127.0.0.1']
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '687708820447-l523bmmvdoe2051ri8m4qkjkap696jf3.apps.googleusercontent.com' # Google Consumer Key
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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' # Google Consumer Secret
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY') # Google Consumer Key
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET') # Google Consumer Secret
 
 
 REDIS_HOST = 'localhost'
